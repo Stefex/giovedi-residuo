@@ -1,0 +1,141 @@
+
+/* BACKGROUND BLU */
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 60px;
+
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6, #60a5fa);
+  background-size: 200% 200%;
+  animation: gradientMove 12s ease infinite;
+
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* CARD PRINCIPALE */
+.card {
+  width: 340px;
+  padding: 35px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* TEXT */
+.date {
+  font-size: 13px;
+  opacity: 0.75;
+  margin-bottom: 15px;
+}
+
+.label {
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+.name {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 10px 0 25px;
+  background: linear-gradient(90deg, #ffffff, #dbeafe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.currentTurn {
+  background: linear-gradient(90deg, #ffd700, #ffec99); /* dorato brillante */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.nextLabel {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.nextName {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+/* CARD TURNI FUTURI */
+.futureCard {
+  width: 340px;
+  padding: 25px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  color: white;
+  animation: fadeIn 0.6s ease;
+}
+
+/* LISTA */
+.listTitle {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 12px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.itemDate {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.activeItem {
+  background: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-weight: 700;
+}
+
+.item:hover {
+  transform: translateX(5px);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* MOBILE */
+@media (max-width: 400px) {
+  .card, .futureCard {
+    width: 90%;
+    padding: 25px;
+  }
+  .name {
+    font-size: 28px;
+  }
+}
