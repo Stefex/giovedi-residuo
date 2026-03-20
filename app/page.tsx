@@ -1,98 +1,100 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import styles from "./page.module.css";
 
-// Lista persone
-const persone: string[] = ["Simo", "Henriette", "Antonietta", "Viviana", "Stefano"];
+type Person = {
+  name: string;
+};
 
-// Giovedì di riferimento
-const START_DATE = new Date("2024-01-04");
+const initialPeople: Person[] = [
+  { name: "Mario Rossi" },
+  { name: "Lucia Bianchi" },
+  { name: "Giovanni Verdi" },
+  { name: "Anna Neri" },
+];
 
-// Funzioni di calcolo
-function getNextThursday(from: Date): Date {
-  const date = new Date(from);
-  const day = date.getDay();
-  const diff = (4 - day + 7) % 7;
-  date.setDate(date.getDate() + diff);
-  return date;
-}
+export default function HomePage() {
+  const [people] = useState<Person[]>(initialPeople);
 
-function getWeekDifference(start: Date, end: Date): number {
-  const diffTime = end.getTime() - start.getTime();
-  return Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
-}
+  const today = new Date();
 
-function addWeeks(date: Date, weeks: number): Date {
-  const newDate = new Date(date);
-  newDate.setDate(date.getDate() + weeks * 7);
-  return newDate;
-}
+  // trova il giovedì corrente (se oggi è giovedì usa oggi)
+  const getCurrentThursday = () => {
+    const d = new Date(today);
+    const day = d.getDay();
+    const diff = (day + 7 - 4) % 7; // 4 = giovedì
+    d.setDate(d.getDate() - diff);
+    return d;
+  };
 
-export default function Home() {
-  const [oggi, setOggi] = useState<Date | null>(null);
+  const currentThursday = getCurrentThursday();
 
-  useEffect(() => {
-    setOggi(new Date());
-  }, []);
+  // lista di tutti i giovedì a partire da una data base
+  const startDate = new Date("2026-01-01");
 
-  if (!oggi) return null;
+  const getThursdayIndex = (date: Date) => {
+    const diffTime = date.getTime() - startDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    return Math.floor(diffDays / 7);
+  };
 
-  const prossimoGiovedi = getNextThursday(oggi);
-  const settimanePassate = getWeekDifference(START_DATE, prossimoGiovedi);
+  const currentIndex =
+    ((getThursdayIndex(currentThursday) % people.length) + people.length) %
+    people.length;
 
-  const turnoIndex = settimanePassate % persone.length;
-  const prossimoIndex = (turnoIndex + 1) % persone.length;
+  const currentPerson = people[currentIndex];
 
-  // Lista ordinata dei turni con date
-  const turniOrdinati = persone
-    .map((persona, index) => {
-      const posizione =
-        (index - turnoIndex + persone.length) % persone.length;
-      const dataTurno = addWeeks(prossimoGiovedi, posizione);
-      return {
-        nome: persona,
-        posizione,
-        data: dataTurno,
-      };
-    })
-    .sort((a, b) => a.posizione - b.posizione);
+  // prossimi giovedì REALI
+  const nextTurns = useMemo(() => {
+    const result = [];
 
-  // ESCLUDO IL TURNO CORRENTE
-  const turniFuturi = turniOrdinati.filter((t) => t.posizione !== 0);
+    for (let i = 1; i <= 4; i++) {
+      const nextDate = new Date(currentThursday);
+      nextDate.setDate(currentThursday.getDate() + i * 7);
 
-  const formatData = (date: Date) =>
-    date.toLocaleDateString("it-IT", {
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-    });
+      const index = (currentIndex + i) % people.length;
+
+      result.push({
+        date: nextDate.toLocaleDateString("it-IT", {
+          weekday: "long",
+          day: "2-digit",
+          month: "2-digit",
+        }),
+        name: people[index].name,
+      });
+    }
+
+    return result;
+  }, [people, currentIndex, currentThursday]);
 
   return (
-    <main className={styles.container}>
-      {/* CARD PRINCIPALE */}
-      <div className={styles.card}>
-        <p className={styles.date}>{formatData(prossimoGiovedi)}</p>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Turni del Giovedì</h1>
 
-        <p className={styles.label}>Turno di questa settimana</p>
-        <h1 className={`${styles.name} ${styles.currentTurn}`}>
-          {persone[turnoIndex]}
-        </h1>
-
-        <p className={styles.nextLabel}>Settimana prossima</p>
-        <h2 className={styles.nextName}>{persone[prossimoIndex]}</h2>
+      {/* turno attuale */}
+      <div className={styles.currentCard}>
+        <div className={styles.label}>Turno attuale</div>
+        <div className={styles.name}>{currentPerson.name}</div>
+        <div className={styles.date}>
+          {currentThursday.toLocaleDateString("it-IT", {
+            weekday: "long",
+            day: "2-digit",
+            month: "2-digit",
+          })}
+        </div>
       </div>
 
-      {/* CARD TURNI FUTURI */}
-      <div className={styles.futureCard}>
-        <p className={styles.listTitle}>Turni futuri</p>
-        {turniFuturi.map((p, i) => (
+      {/* prossimi turni */}
+      <div className={styles.nextCard}>
+        <div className={styles.label}>Prossimi turni</div>
+        {nextTurns.map((t, i) => (
           <div key={i} className={styles.item}>
-            <span>{p.nome}</span>
-            <span className={styles.itemDate}>{formatData(p.data)}</span>
+            <span>{t.date}</span>
+            <span>{t.name}</span>
           </div>
         ))}
       </div>
-    </main>
+    </div>
   );
 }

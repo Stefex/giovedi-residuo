@@ -1,165 +1,96 @@
-
+/* BACKGROUND */
 .container {
   min-height: 100vh;
+  padding: 40px 16px;
+  background: #f2f2f7;
+  font-family: -apple-system, BlinkMacSystemFont, "San Francisco",
+    "Helvetica Neue", sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
-  padding-top: 60px;
-
-  background-color:#0b1f3a;
-  background-size: 200% 200%;
-  animation: gradientMove 20s ease infinite;
+  gap: 20px;
 }
 
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* CARD PRINCIPALE LIQUID */
-.card {
-  width: 360px;
-  padding: 40px;
-  border-radius: 36px 24px 36px 24px; /* forme morbide e liquide */
-  background: rgba(255, 255, 255, 0.07);
-  backdrop-filter: blur(25px);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.08);
+/* TITLE */
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #000;
   text-align: center;
-  color: white;
-  margin-bottom: 30px;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s ease;
 }
 
-.card::before {
-  content: '';
-  position: absolute;
-  top: -30%;
-  left: -30%;
-  width: 160%;
-  height: 160%;
-  background: rgba(255,255,255,0.05);
-  border-radius: 50%;
-  filter: blur(100px);
-  animation: liquidGlow 8s ease-in-out infinite alternate;
+/* CARD BASE */
+.currentCard,
+.nextCard {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-@keyframes liquidGlow {
-  0% { transform: translate(0%, 0%) scale(1); }
-  50% { transform: translate(5%, 5%) scale(1.1); }
-  100% { transform: translate(0%, 0%) scale(1); }
+/* CURRENT TURN (più importante) */
+.currentCard {
+  border: 2px solid #007aff;
 }
 
-.card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1);
-}
-
-/* TEXT */
-.date {
+/* LABEL */
+.label {
   font-size: 14px;
-  opacity: 0.75;
-  margin-bottom: 15px;
+  font-weight: 600;
+  color: #8e8e93;
+  margin-bottom: 8px;
+  text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.label {
-  font-size: 14px;
-  opacity: 0.85;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
+/* NAME */
 .name {
-  font-size: 38px;
+  font-size: 26px;
   font-weight: 700;
-  margin: 10px 0 25px;
-  background: linear-gradient(90deg, #ffffff, #a0c4ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #000;
+  margin-bottom: 6px;
 }
 
-.currentTurn {
-  background: linear-gradient(90deg, #ffd700, #ffec99);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.nextLabel {
-  font-size: 13px;
-  opacity: 0.7;
-}
-
-.nextName {
-  font-size: 24px;
-  margin-bottom: 20px;
-  font-weight: 500;
-}
-
-/* CARD TURNI FUTURI LIQUID */
-.futureCard {
-  width: 360px;
-  padding: 30px;
-  border-radius: 32px 20px 32px 20px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
-  color: white;
-  margin-bottom: 20px;
-  transition: all 0.3s ease;
-}
-
-/* LISTA */
-.listTitle {
+/* DATE */
+.date {
   font-size: 14px;
-  opacity: 0.8;
-  margin-bottom: 15px;
-  text-align: center;
-  font-weight: 500;
+  color: #8e8e93;
 }
 
+/* NEXT LIST */
+.nextCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ITEM */
 .item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 15px;
-  border-radius: 20px; /* elementi liquidi */
-  margin-bottom: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  font-size: 14px;
-  transition: all 0.3s ease;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #f9f9fb;
+  font-size: 15px;
+  font-weight: 500;
+  color: #000;
+  transition: 0.15s;
 }
 
 .item:hover {
-  transform: translateX(3px);
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.itemDate {
-  font-size: 12px;
-  opacity: 0.7;
-}
-
-.activeItem {
-  background: rgba(255, 255, 255, 0.25);
-  color: #fff;
-  font-weight: 700;
+  background: #ececf1;
 }
 
 /* MOBILE */
-@media (max-width: 400px) {
-  .card, .futureCard {
-    width: 90%;
-    padding: 25px;
-  }
+@media (max-width: 420px) {
   .name {
-    font-size: 32px;
+    font-size: 22px;
   }
-  .nextName {
-    font-size: 20px;
+
+  .title {
+    font-size: 24px;
   }
 }
